@@ -18,3 +18,11 @@ class CommentForm(forms.ModelForm):
          if len(data) > 2000:
              raise forms.ValidationError('Comment is too long (max 2000 characters).')
          return data
+    
+class PostForm(forms.ModelForm):
+     class Meta:
+       model = Post
+       fields = ['title', 'content', 'published_date', 'tags']
+       widgets = {
+       'published_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+}
