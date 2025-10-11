@@ -25,4 +25,5 @@ class PostForm(forms.ModelForm):
        fields = ['title', 'content', 'published_date', 'tags']
        widgets = {
        'published_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+       'tags': TagWidget(),
 }
