@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib.auth.models import User
-from .models import Post
+from django.contrib.auth import get_user_model
+from .models import Post, Comment
 
 class PostCRUDTest(TestCase):
     def setUp(self):
@@ -49,3 +49,21 @@ class PostCRUDTest(TestCase):
         self.assertEqual(resp.status_code, 302)
         self.assertTrue(Post.objects.filter(title='New').exists())
 
+class CommentTests(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(username='tester', password='pass')
+        self.other = User.objects.create_user(username='other', password='pass')
+        self.post = Post.objects.create(title='Test', content='Body', author=self.user)
+
+    def test_create_comment(self):
+        self.client.login(username='tester', password='pass')
+        resp = self.client.post(reverse('comment-create', kwargs={'post_pk': self.post.pk}), {'content': 'Nice post'})
+        self.assertRedirects(resp, reverse('post-detail', kwargs={'pk': self.post.pk}))
+        self.assertEqual(self.post.comments.count(), 1)
+
+
+    def test_edit_only_author(self):
+        comment = Comment.objects.create(post=self.post, author=self.user, content='Hi')
+        self.client.login(username='other', password='pass')
+        resp = self.client.post(reverse('comment-edit', kwargs={'pk': comment.pk}), {'content': 'Malicious'})
+        self.assertNotEqual(Comment.objects.get(pk=comment.pk).content, 'Malicious')
