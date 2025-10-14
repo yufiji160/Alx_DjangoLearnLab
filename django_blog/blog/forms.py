@@ -1,29 +1,25 @@
 from django import forms
-from .models import Comment
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
+from .models import Profile
 
+class UserRegisterForm(UserCreationForm):
+    email = forms.EmailField(required=True)
 
-class CommentForm(forms.ModelForm):
     class Meta:
-      model = Comment
-      fields = ['content']
-      widgets = {
-      'content': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Write your comment...'}),
-}
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
 
 
-    def clean_content(self):
-         data = self.cleaned_data.get('content', '').strip()
-         if not data:
-            raise forms.ValidationError('Comment cannot be empty.')
-         if len(data) > 2000:
-             raise forms.ValidationError('Comment is too long (max 2000 characters).')
-         return data
-    
-class PostForm(forms.ModelForm):
-     class Meta:
-       model = Post
-       fields = ['title', 'content', 'published_date', 'tags']
-       widgets = {
-       'published_date': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
-       'tags': TagWidget(),
-}
+class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField(required=True)
+
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['bio', 'profile_image']

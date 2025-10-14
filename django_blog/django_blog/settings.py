@@ -136,3 +136,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'blog', 'static')]
 
 TEMPLATES[0]['DIRS'] = [os.path.join(BASE_DIR, 'blog', 'templates')]
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
