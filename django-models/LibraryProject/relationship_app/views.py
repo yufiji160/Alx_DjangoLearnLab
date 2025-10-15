@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, logout
+from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 
 
 def login_view(request):
@@ -15,7 +15,7 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, f"Welcome {username}!")
-                return redirect('home')  # change 'home' to your home view name
+                return redirect('home')  # change 'home' to your home page
             else:
                 messages.error(request, "Invalid username or password.")
         else:
@@ -39,7 +39,7 @@ def register_view(request):
             messages.success(request, "Registration successful!")
             return redirect('home')
         else:
-            messages.error(request, "Registration failed. Try again.")
+            messages.error(request, "Registration failed. Please try again.")
     else:
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
