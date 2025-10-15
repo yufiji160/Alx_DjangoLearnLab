@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth import login
-from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import AuthenticationForm
 
 
 def login_view(request):
@@ -15,7 +16,7 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, f"Welcome {username}!")
-                return redirect('home')  # change 'home' to your home page
+                return redirect('home')  # replace 'home' if needed
             else:
                 messages.error(request, "Invalid username or password.")
         else:
