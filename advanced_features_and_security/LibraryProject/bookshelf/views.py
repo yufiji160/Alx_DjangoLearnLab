@@ -20,3 +20,16 @@ def example_form_view(request):
     else:
         form = ExampleForm()
     return render(request, 'bookshelf/form_example.html', {'form': form})
+
+def example_form_view(request):
+    from .forms import ExampleForm
+    if request.method == 'POST':
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            return render(request, 'bookshelf/form_example.html', {
+                'form': form,
+                'message': 'Form submitted successfully!'
+            })
+    else:
+        form = ExampleForm()
+    return render(request, 'bookshelf/form_example.html', {'form': form})
