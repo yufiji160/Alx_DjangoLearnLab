@@ -103,5 +103,50 @@ AUTH_USER_MODEL = 'relationship_app.CustomUser'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+DEBUG = False
+
+
+ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+
+
+SECURE_BROWSER_XSS_FILTER = True
+
+
+X_FRAME_OPTIONS = "DENY"
+
+
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+
+SECURE_HSTS_SECONDS = 60 
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = False
+
+SECURE_SSL_REDIRECT = True
+
+
+SESSION_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = False
+
+# Ensure SECRET_KEY is kept secret and not checked into source control
+# (no change here, but reminder)
+# SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'replace-me-in-production')
+
+# Add custom middleware 
+MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "bookshelf.middleware.csp_middleware.SimpleCSPMiddleware",
+]
+
+#
 
 
