@@ -102,5 +102,6 @@ AUTH_USER_MODEL = 'relationship_app.CustomUser'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'bookshelf.CustomUser'
+
+
 
