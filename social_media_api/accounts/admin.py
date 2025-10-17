@@ -1,10 +1,5 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser
+from .models import User
 
-
-@admin.register(CustomUser)
-class CustomUserAdmin(UserAdmin):
-    fieldsets = UserAdmin.fieldsets + (
-      ('Additional', {'fields': ('bio', 'profile_picture', 'followers')}),
-)
+admin.site.register(User, UserAdmin)
