@@ -1,13 +1,14 @@
 from rest_framework import serializers
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, get_user_model
 from rest_framework.authtoken.models import Token
-from .models import CustomUser
+
+User = get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
     """Serializer for displaying and updating user details."""
     class Meta:
-        model = CustomUser
+        model = User
         fields = [
             'id', 'username', 'email', 'first_name',
             'last_name', 'bio', 'profile_picture'
@@ -16,21 +17,33 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    """Serializer for user registration."""
+    """Serializer for user registration using create_user()."""
     password = serializers.CharField(write_only=True, required=True)
 
     class Meta:
-        model = CustomUser
+        model = User
         fields = [
             'username', 'email', 'password',
             'first_name', 'last_name', 'bio'
         ]
 
     def create(self, validated_data):
-        password = validated_data.pop('password')
-        user = CustomUser(**validated_data)
-        user.set_password(password)
-        user.save()
+        # use Django’s built-in user manager method
+        user = User.objects.create_user(
+            username=validated_data.get('username'),
+            email=validated_data.get('email'),
+            password=validated_data.get('password'),
+            first_name=validated_data.get('first_name', ''),
+            last_name=validated_data.get('last_name', '')
+        )
+
+        # optional: include bio if provided
+        bio = validated_data.get('bio')
+        if bio:
+            user.bio = bio
+            user.save()
+
+        # automatically generate an auth token
         Token.objects.create(user=user)
         return user
 
