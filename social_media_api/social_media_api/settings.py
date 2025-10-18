@@ -141,3 +141,5 @@ MEDIA_ROOT = BASE_DIR / 'media'
 CORS_ALLOWED_ORIGINS = [
     'https://your-frontend-domain.com',
 ]
+
+PORT = int(os.environ.get("PORT", 8000))
