@@ -4,6 +4,9 @@ from django.shortcuts import get_object_or_404
 from .models import Post, Like
 from .serializers import LikeSerializer
 from notifications.models import Notification
+from rest_framework.response import Response
+from .models import Post
+from .serializers import PostSerializer
 
 
 class LikePostView(generics.GenericAPIView):
@@ -40,3 +43,12 @@ class UnlikePostView(generics.GenericAPIView):
 
         like.delete()
         return Response({"detail": "Post unliked successfully."}, status=status.HTTP_200_OK)
+
+class FeedView(generics.ListAPIView):
+    serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        following_users = user.following.all()
+        return Post.objects.filter(author__in=following_users).order_by('-created_at')
